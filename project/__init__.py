@@ -1,6 +1,10 @@
 from fastapi import FastAPI
+from dotenv import load_dotenv
+
+load_dotenv()
 from project.database import database, User, Movie, UserReview
 from project.routers import router as api_router
+import os
 
 app = FastAPI(
     title="fastAPI Demo",

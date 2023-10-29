@@ -1,6 +1,7 @@
 from peewee import *
 from datetime import datetime
 import hashlib
+from typing import Union
 
 database = MySQLDatabase(
     "fastapi_project", user="root", password="password", host="localhost", port=3306
@@ -24,6 +25,13 @@ class User(Model):
         h = hashlib.md5(usedforsecurity=False)
         h.update(password.encode("utf-8"))
         return h.hexdigest()
+
+    @classmethod
+    def authenticate(cls, username, password) -> Union["User", None]:
+        user = cls.select().where(cls.username == username).first()
+        if user and user.password == cls.create_password(password):
+            return user
+        return None
 
 
 class Movie(Model):
